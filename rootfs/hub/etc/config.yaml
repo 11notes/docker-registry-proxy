@@ -1,0 +1,31 @@
+version: 0.1
+log:
+  level: warn
+  fields:
+    service: registry
+storage:
+  cache:
+    blobdescriptor: inmemory
+  filesystem:
+    rootdirectory: /registry-proxy/var
+  maintenance:
+    uploadpurging:
+      enabled: true
+      age: 168h
+      interval: 24h
+      dryrun: false
+http:
+  addr: 0.0.0.0:5000
+  net: tcp
+  tls:
+    certificate: /registry-proxy/ssl/default.crt
+    key: /registry-proxy/ssl/default.key
+  headers:
+    X-Content-Type-Options: [nosniff]
+health:
+  storagedriver:
+    enabled: true
+    interval: 10s
+    threshold: 3
+proxy:
+  remoteurl: https://registry-1.docker.io
