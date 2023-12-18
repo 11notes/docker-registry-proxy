@@ -1,9 +1,9 @@
 # Alpine :: Docker Registry (proxy)
 ![size](https://img.shields.io/docker/image-size/11notes/registry-proxy/2.8.3?color=0eb305) ![version](https://img.shields.io/docker/v/11notes/registry-proxy?color=eb7a09) ![pulls](https://img.shields.io/docker/pulls/11notes/registry-proxy?color=2b75d6) ![activity](https://img.shields.io/github/commit-activity/m/11notes/docker-registry-proxy?color=c91cb8) ![commit-last](https://img.shields.io/github/last-commit/11notes/docker-registry-proxy?color=c91cb8)
 
-Run a Docker registry as a proxy based on Alpine Linux. Small, lightweight, secure and fast 🏔️
+Run Docker Registry Proxy based on Alpine Linux. Small, lightweight, secure and fast 🏔️
 
-## Use Case
+## Description
 With this image all your offline docker nodes can still request and pull all images available at hub.docker.com. Simply put this image behind your favourite reverse HTTPS proxy and point all nodes via `/etc/docker/daemon.json >> "registry-mirrors": ["https://docker.domain.com"]` to this proxy. Your offline docker nodes can now successfully pull all public images available. Registry mirrors can be daisy chained, so that the first mirror will pull and hold all public images, and the next mirror would be a private one.
 
 ## Volumes
@@ -28,10 +28,10 @@ docker run --name registry-proxy \
 ## Parent image
 * [registry:2.8.3](https://hub.docker.com/_/registry)
 
-## Built with and thanks to
+## Built with (thanks to)
 * [Docker](https://www.docker.com)
 * [Alpine Linux](https://alpinelinux.org)
 
 ## Tips
 * Only use rootless container runtime (podman, rootless docker)
-* Don't bind to ports < 1024 (requires root), use NAT/reverse proxy (haproxy, traefik, registry-proxy)
+* Don't bind to ports < 1024 (requires root), use NAT/reverse proxy (haproxy, traefik, nginx)
