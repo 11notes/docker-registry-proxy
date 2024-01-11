@@ -1,11 +1,15 @@
 version: 0.1
 log:
+  accesslog:
+    disabled: false
   level: warn
+  formatter: json
   fields:
     service: registry
 storage:
   cache:
     blobdescriptor: inmemory
+    blobdescriptorsize: 0
   filesystem:
     rootdirectory: /registry-proxy/var
   maintenance:
@@ -29,3 +33,4 @@ health:
     threshold: 3
 proxy:
   remoteurl: https://registry-1.docker.io
+  ttl: 168h
