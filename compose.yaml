@@ -1,0 +1,51 @@
+name: "registry-proxy"
+services:
+  registry-proxy:
+    image: "11notes/registry-proxy:2.8.3"
+    container_name: "registry-proxy"
+    environment:
+      TZ: Europe/Zurich
+      REGISTRY_PROXY_CONFIG: |-
+        version: 0.1
+        log:
+          accesslog:
+            disabled: false
+          level: warn
+          formatter: json
+          fields:
+            service: registry
+        storage:
+          cache:
+            blobdescriptor: inmemory
+            blobdescriptorsize: 0
+          filesystem:
+            rootdirectory: /registry-proxy/var
+          maintenance:
+            uploadpurging:
+              enabled: true
+              age: 168h
+              interval: 24h
+              dryrun: false
+        http:
+          addr: 0.0.0.0:5000
+          net: tcp
+          tls:
+            certificate: /registry-proxy/ssl/default.crt
+            key: /registry-proxy/ssl/default.key
+          headers:
+            X-Content-Type-Options: [nosniff]
+        health:
+          storagedriver:
+            enabled: true
+            interval: 10s
+            threshold: 3
+        proxy:
+          remoteurl: https://registry-1.docker.io
+          ttl: 168h
+    ports:
+      - "5000:5000/tcp"
+    volumes:
+      - "var:/registry-proxy/var"
+    restart: always
+volumes:
+  var:

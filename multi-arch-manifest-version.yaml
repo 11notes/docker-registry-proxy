@@ -1,0 +1,11 @@
+image: 11notes/registry-proxy:2.8.3
+manifests:
+  - image: 11notes/registry-proxy:amd64-2.8.3
+    platform:
+      architecture: amd64
+      os: linux
+  - image: 11notes/registry-proxy:arm64v8-2.8.3
+    platform:
+      architecture: arm64
+      os: linux
+      variant: v8

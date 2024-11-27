@@ -1,3 +1,6 @@
+# :: QEMU
+  FROM multiarch/qemu-user-static:x86_64-aarch64 as qemu
+
 # :: Util
   FROM alpine as util
 
@@ -7,8 +10,9 @@
     git clone https://github.com/11notes/util.git;
 
 # :: Header
-  FROM registry:2.8.3
+  FROM --platform=linux/arm64 registry:2.8.3
   COPY --from=util /util/docker /usr/local/bin
+  COPY --from=qemu /usr/bin/qemu-aarch64-static /usr/bin
   ENV APP_ROOT=/registry-proxy
   ENV APP_NAME="registry-proxy"
   ENV APP_VERSION=2.8.3

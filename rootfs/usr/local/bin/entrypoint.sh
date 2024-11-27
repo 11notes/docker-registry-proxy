@@ -7,6 +7,11 @@
   fi
 
   if [ -z "${1}" ]; then
+    if [ ! -z "${REGISTRY_PROXY_CONFIG}" ]; then
+      elevenLogJSON info "setting custom ${APP_NAME} config"
+      echo "${REGISTRY_PROXY_CONFIG}" > ${APP_ROOT}/etc/config.yaml
+    fi    
+    elevenLogJSON info "starting ${APP_NAME} v${APP_VERSION}"
     set -- "registry" \
       serve \
       ${APP_ROOT}/etc/config.yaml
