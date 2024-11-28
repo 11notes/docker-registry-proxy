@@ -9,33 +9,33 @@
 # :: Header
   FROM registry:2.8.3
   COPY --from=util /util/docker /usr/local/bin
-  ENV APP_ROOT=/registry-proxy
   ENV APP_NAME="registry-proxy"
   ENV APP_VERSION=2.8.3
+  ENV APP_ROOT=/registry-proxy
 
 # :: Run
   USER root
 
-  # :: update image
+  # :: install binaries required
     RUN set -ex; \
       apk --no-cache add \
         curl \
         tzdata \
         shadow \
-        openssl; \
-      apk --no-cache upgrade;
+        openssl;
 
   # :: create user
     RUN set -ex; \
       addgroup --gid 1000 -S docker; \
       adduser --uid 1000 -D -S -h / -s /sbin/nologin -G docker docker;
 
-  # :: prepare image
+  # :: prepare container file system
     RUN set -ex; \
       mkdir -p ${APP_ROOT}; \
+      mkdir -p ${APP_ROOT}/var; \
       mkdir -p ${APP_ROOT}/etc; \
       mkdir -p ${APP_ROOT}/ssl; \
-      rm /entrypoint.sh;
+      rm /entrypoint.sh;  
 
   # :: copy root filesystem changes and add execution rights to init scripts
     COPY ./rootfs /

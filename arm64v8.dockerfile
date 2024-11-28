@@ -11,11 +11,11 @@
 
 # :: Header
   FROM --platform=linux/arm64 registry:2.8.3
-  COPY --from=util /util/docker /usr/local/bin
   COPY --from=qemu /usr/bin/qemu-aarch64-static /usr/bin
-  ENV APP_ROOT=/registry-proxy
+  COPY --from=util /util/docker /usr/local/bin
   ENV APP_NAME="registry-proxy"
   ENV APP_VERSION=2.8.3
+  ENV APP_ROOT=/registry-proxy
 
 # :: Run
   USER root
@@ -33,13 +33,14 @@
     RUN set -ex; \
       addgroup --gid 1000 -S docker; \
       adduser --uid 1000 -D -S -h / -s /sbin/nologin -G docker docker;
-
-  # :: prepare image
+  
+  # :: prepare container file system
     RUN set -ex; \
       mkdir -p ${APP_ROOT}; \
+      mkdir -p ${APP_ROOT}/var; \
       mkdir -p ${APP_ROOT}/etc; \
       mkdir -p ${APP_ROOT}/ssl; \
-      rm /entrypoint.sh;
+      rm /entrypoint.sh;    
 
   # :: copy root filesystem changes and add execution rights to init scripts
     COPY ./rootfs /
